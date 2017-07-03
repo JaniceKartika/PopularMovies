@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Popular Movies</string>
+    <string name="detail_label">Movie Detail</string>
+
+    <string name="poster_description">Movie Poster</string>
+
+    <string name="popular">Popular</string>
+    <string name="top_rated">Top Rated</string>
+    <string name="release_date">Release Date</string>
+    <string name="rating">Rating</string>
+
+    <string name="failed_fetch_popular">Failed to fetch Popular Movies</string>
+    <string name="failed_fetch_top_rated">Failed to fetch Top Rated Movies</string>
+    <string name="failed_show_detail">Failed to show Movie detail</string>
+
+    <string name="max_rating">/10.0</string>
+
+    <string name="movie_db_date_format">yyyy-MM-dd</string>
+    <string name="date_format">MMMM d, yyyy</string>
+
+    <string name="sort_key">Sort Key</string>
+    <string name="popular_movies_key">Popular Movies Key</string>
+    <string name="top_rated_movies_key">Top Rated Movies Key</string>
+    <string name="popular_page_key">Popular Page Key</string>
+    <string name="top_rated_page_key">Top Rated Page Key</string>
+    <string name="detail_key">Detail Key</string>
+</resources>
