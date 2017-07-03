@@ -91,24 +91,30 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Item
         popularMovies.enqueue(new Callback<MainModel>() {
             @Override
             public void onResponse(Call<MainModel> call, Response<MainModel> response) {
-                if (response.body().getResults() != null) {
-                    if (clearList) mPopularMovieModels.clear();
-                    else popularPage++;
-                    mPopularMovieModels.addAll(response.body().getResults());
+                if (response.body() != null) {
+                    if (response.body().getResults() != null) {
+                        if (clearList) mPopularMovieModels.clear();
+                        else popularPage++;
+                        mPopularMovieModels.addAll(response.body().getResults());
 
-                    mMovieModels.clear();
-                    mMovieModels.addAll(mPopularMovieModels);
-                    mAdapter.notifyDataSetChanged();
-                    mScrollListener.resetState();
+                        mMovieModels.clear();
+                        mMovieModels.addAll(mPopularMovieModels);
+                        mAdapter.notifyDataSetChanged();
+                        mScrollListener.resetState();
 
-                    isSortPopular = true;
+                        isSortPopular = true;
+                    } else {
+                        Toast.makeText(MainActivity.this, R.string.no_results, Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, R.string.failed_fetch_popular, Toast.LENGTH_SHORT).show();
                 }
                 hideLoading();
             }
 
             @Override
             public void onFailure(Call<MainModel> call, Throwable t) {
-                Log.d(TAG, getString(R.string.failed_fetch_popular), t.getCause());
+                Log.e(TAG, getString(R.string.failed_fetch_popular), t.getCause());
                 Toast.makeText(MainActivity.this, R.string.failed_fetch_popular, Toast.LENGTH_SHORT).show();
                 hideLoading();
             }
@@ -122,24 +128,30 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Item
         topRatedMovies.enqueue(new Callback<MainModel>() {
             @Override
             public void onResponse(Call<MainModel> call, Response<MainModel> response) {
-                if (response.body().getResults() != null) {
-                    if (clearList) mTopRatedMovieModels.clear();
-                    else topRatedPage++;
-                    mTopRatedMovieModels.addAll(response.body().getResults());
+                if (response.body() != null) {
+                    if (response.body().getResults() != null) {
+                        if (clearList) mTopRatedMovieModels.clear();
+                        else topRatedPage++;
+                        mTopRatedMovieModels.addAll(response.body().getResults());
 
-                    mMovieModels.clear();
-                    mMovieModels.addAll(mTopRatedMovieModels);
-                    mAdapter.notifyDataSetChanged();
-                    mScrollListener.resetState();
+                        mMovieModels.clear();
+                        mMovieModels.addAll(mTopRatedMovieModels);
+                        mAdapter.notifyDataSetChanged();
+                        mScrollListener.resetState();
 
-                    isSortPopular = false;
+                        isSortPopular = false;
+                    } else {
+                        Toast.makeText(MainActivity.this, R.string.no_results, Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, R.string.failed_fetch_top_rated, Toast.LENGTH_SHORT).show();
                 }
                 hideLoading();
             }
 
             @Override
             public void onFailure(Call<MainModel> call, Throwable t) {
-                Log.d(TAG, getString(R.string.failed_fetch_top_rated), t.getCause());
+                Log.e(TAG, getString(R.string.failed_fetch_top_rated), t.getCause());
                 Toast.makeText(MainActivity.this, R.string.failed_fetch_top_rated, Toast.LENGTH_SHORT).show();
                 hideLoading();
             }

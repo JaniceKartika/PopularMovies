@@ -12,6 +12,7 @@
     <string name="failed_fetch_popular">Failed to fetch Popular Movies</string>
     <string name="failed_fetch_top_rated">Failed to fetch Top Rated Movies</string>
     <string name="failed_show_detail">Failed to show Movie detail</string>
+    <string name="no_results">No results</string>
 
     <string name="max_rating">/10.0</string>
 
