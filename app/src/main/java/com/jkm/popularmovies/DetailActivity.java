@@ -14,7 +14,21 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class DetailActivity extends AppCompatActivity {
+
+    @BindView(R.id.tv_name_detail)
+    TextView nameTextView;
+    @BindView(R.id.iv_poster_detail)
+    ImageView posterImageView;
+    @BindView(R.id.tv_release_date_detail)
+    TextView releaseDateTextView;
+    @BindView(R.id.tv_rating_detail)
+    TextView ratingTextView;
+    @BindView(R.id.tv_overview_detail)
+    TextView overviewTextView;
 
     private MovieModel mMovieModel;
 
@@ -22,12 +36,7 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-
-        TextView nameTextView = (TextView) findViewById(R.id.tv_name_detail);
-        ImageView posterImageView = (ImageView) findViewById(R.id.iv_poster_detail);
-        TextView releaseDateTextView = (TextView) findViewById(R.id.tv_release_date_detail);
-        TextView ratingTextView = (TextView) findViewById(R.id.tv_rating_detail);
-        TextView overviewTextView = (TextView) findViewById(R.id.tv_overview_detail);
+        ButterKnife.bind(this);
 
         Intent intent = getIntent();
         if (intent.hasExtra(getString(R.string.detail_key))) {

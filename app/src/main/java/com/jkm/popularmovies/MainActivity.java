@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -27,8 +29,10 @@ import retrofit2.http.Query;
 public class MainActivity extends AppCompatActivity implements MovieAdapter.ItemClickListener {
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private RecyclerView mMovieRecyclerView;
-    private ProgressBar mMovieProgressBar;
+    @BindView(R.id.rv_movie_list)
+    RecyclerView mMovieRecyclerView;
+    @BindView(R.id.pb_movie_list)
+    ProgressBar mMovieProgressBar;
 
     private MovieAdapter mAdapter;
     private ArrayList<MovieModel> mMovieModels = new ArrayList<>();
@@ -47,9 +51,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Item
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        mMovieRecyclerView = (RecyclerView) findViewById(R.id.rv_movie_list);
-        mMovieProgressBar = (ProgressBar) findViewById(R.id.pb_movie_list);
+        ButterKnife.bind(this);
 
         int orientation = getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
