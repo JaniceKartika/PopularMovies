@@ -42,7 +42,11 @@ class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
         holder.mRatingTextView.setText(rating);
 
         String posterPath = BuildConfig.MOVIE_DB_POSTER_URL + movieModel.getPosterPath();
-        Picasso.with(mContext).load(posterPath).into(holder.mPosterImageView);
+        Picasso.with(mContext)
+                .load(posterPath)
+                .placeholder(R.drawable.placeholder)
+                .error(R.drawable.placeholder)
+                .into(holder.mPosterImageView);
     }
 
     @Override

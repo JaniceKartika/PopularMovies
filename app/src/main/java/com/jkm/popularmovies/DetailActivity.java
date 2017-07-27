@@ -35,7 +35,11 @@ public class DetailActivity extends AppCompatActivity {
             nameTextView.setText(mMovieModel.getOriginalTitle());
 
             String posterPath = BuildConfig.MOVIE_DB_POSTER_URL + mMovieModel.getPosterPath();
-            Picasso.with(this).load(posterPath).into(posterImageView);
+            Picasso.with(this)
+                    .load(posterPath)
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.placeholder)
+                    .into(posterImageView);
 
             String releaseDate = getFormattedDate(mMovieModel.getReleaseDate(), getString(R.string.movie_db_date_format),
                     getString(R.string.date_format));

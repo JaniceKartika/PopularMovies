@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -18,7 +19,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:textColor="@color/textColorPrimary"
-            android:textSize="@dimen/font_large" />
+            android:textSize="@dimen/font_large"
+            tools:text="Beauty and the Beast" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,7 +36,8 @@
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
-                android:contentDescription="@string/poster_description" />
+                android:contentDescription="@string/poster_description"
+                tools:src="@drawable/placeholder" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -55,7 +58,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/vertical_margin"
                     android:textColor="@color/textColorPrimary"
-                    android:textSize="@dimen/font_normal" />
+                    android:textSize="@dimen/font_normal"
+                    tools:text="March 16, 2017" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -70,7 +74,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/vertical_margin"
                     android:textColor="@color/textColorPrimary"
-                    android:textSize="@dimen/font_normal" />
+                    android:textSize="@dimen/font_normal"
+                    tools:text="6.8/10.0" />
             </LinearLayout>
         </LinearLayout>
 
@@ -79,6 +84,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/textColorSecondary"
-            android:textSize="@dimen/font_normal" />
+            android:textSize="@dimen/font_normal"
+            tools:text="A live-action adaptation of Disney's version of the classic 'Beauty and the Beast' tale of a cursed prince and a beautiful young woman who helps him break the spell." />
     </LinearLayout>
 </ScrollView>
