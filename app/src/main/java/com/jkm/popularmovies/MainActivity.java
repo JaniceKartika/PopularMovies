@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Item
     private boolean isSortPopular = true;
     private boolean disableMenu;
     private int popularPage = 2, topRatedPage = 2;
+    private static int totalPopularPage, totalTopRatedPage;
 
     private EndlessRecyclerViewScrollListener mScrollListener;
 
@@ -94,7 +95,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Item
             @Override
             public void onResponse(Call<MainModel> call, Response<MainModel> response) {
                 if (response.body() != null) {
-                    if (response.body().getResults() != null) {
+                    totalPopularPage = response.body().getTotalPages();
+                    ArrayList<MovieModel> results = response.body().getResults();
+                    if (results != null && !results.isEmpty()) {
                         if (clearList) mPopularMovieModels.clear();
                         else popularPage++;
                         mPopularMovieModels.addAll(response.body().getResults());
@@ -131,7 +134,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Item
             @Override
             public void onResponse(Call<MainModel> call, Response<MainModel> response) {
                 if (response.body() != null) {
-                    if (response.body().getResults() != null) {
+                    totalTopRatedPage = response.body().getTotalPages();
+                    ArrayList<MovieModel> results = response.body().getResults();
+                    if (results != null && !results.isEmpty()) {
                         if (clearList) mTopRatedMovieModels.clear();
                         else topRatedPage++;
                         mTopRatedMovieModels.addAll(response.body().getResults());
@@ -233,9 +238,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Item
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 if (isSortPopular) {
-                    callPopularMovies(popularPage, false);
+                    if (popularPage <= totalPopularPage) {
+                        callPopularMovies(popularPage, false);
+                    }
                 } else {
-                    callTopRatedMovies(topRatedPage, false);
+                    if (topRatedPage <= totalTopRatedPage) {
+                        callTopRatedMovies(topRatedPage, false);
+                    }
                 }
             }
         };
