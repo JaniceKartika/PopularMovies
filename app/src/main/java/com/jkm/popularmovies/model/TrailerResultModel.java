@@ -1,4 +1,4 @@
-package com.jkm.popularmovies;
+package com.jkm.popularmovies.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

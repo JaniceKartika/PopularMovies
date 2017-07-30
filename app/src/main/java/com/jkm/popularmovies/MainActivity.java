@@ -14,6 +14,9 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.jkm.popularmovies.model.MainModel;
+import com.jkm.popularmovies.model.MovieModel;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;

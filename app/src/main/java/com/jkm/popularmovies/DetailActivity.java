@@ -20,13 +20,17 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jkm.popularmovies.model.MovieModel;
+import com.jkm.popularmovies.model.ReviewModel;
+import com.jkm.popularmovies.model.ReviewResultModel;
+import com.jkm.popularmovies.model.TrailerModel;
+import com.jkm.popularmovies.model.TrailerResultModel;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
