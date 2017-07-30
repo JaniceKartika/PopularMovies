@@ -15,23 +15,30 @@
     <string name="failed_fetch_top_rated">Failed to fetch Top Rated Movies</string>
     <string name="failed_show_detail">Failed to show Movie detail</string>
     <string name="failed_fetch_reviews">Failed to fetch Movie reviews</string>
+    <string name="failed_fetch_trailers">Failed to fetch Movie trailers</string>
     <string name="no_results">No results</string>
     <string name="no_reviews">No reviews</string>
 
-    <string name="max_rating">/10.0</string>
+    <string name="youtube" translatable="false">YouTube</string>
+    <string name="youtube_app" translatable="false">vnd.youtube:</string>
+
+    <string name="max_rating" translatable="false">/10.0</string>
+    <string name="youtube_thumbnail_suffix_link" translatable="false">/0.jpg</string>
 
     <string name="read_more">read more</string>
     <string name="read_less">read less</string>
 
-    <string name="movie_db_date_format">yyyy-MM-dd</string>
-    <string name="date_format">MMMM d, yyyy</string>
+    <string name="movie_db_date_format" translatable="false">yyyy-MM-dd</string>
+    <string name="date_format" translatable="false">MMMM d, yyyy</string>
 
-    <string name="sort_key">Sort Key</string>
-    <string name="popular_movies_key">Popular Movies Key</string>
-    <string name="top_rated_movies_key">Top Rated Movies Key</string>
-    <string name="popular_page_key">Popular Page Key</string>
-    <string name="top_rated_page_key">Top Rated Page Key</string>
-    <string name="detail_key">Detail Key</string>
-    <string name="review_key">Review Key</string>
-    <string name="review_page_key">Review Page Key</string>
+    <string name="sort_key" translatable="false">Sort Key</string>
+    <string name="popular_movies_key" translatable="false">Popular Movies Key</string>
+    <string name="top_rated_movies_key" translatable="false">Top Rated Movies Key</string>
+    <string name="popular_page_key" translatable="false">Popular Page Key</string>
+    <string name="top_rated_page_key" translatable="false">Top Rated Page Key</string>
+    <string name="detail_key" translatable="false">Detail Key</string>
+    <string name="trailer_key" translatable="false">Trailer Key</string>
+    <string name="trailer_link_key" translatable="false">Trailer Link Key</string>
+    <string name="review_key" translatable="false">Review Key</string>
+    <string name="review_page_key" translatable="false">Review Page Key</string>
 </resources>

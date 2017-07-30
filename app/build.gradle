@@ -21,6 +21,8 @@ android {
         it.buildConfigField 'String', 'MOVIE_DB_API_KEY', MovieDbApiKey
         it.buildConfigField 'String', 'MOVIE_DB_API_URL', MovieDbApiUrl
         it.buildConfigField 'String', 'MOVIE_DB_POSTER_URL', MovieDbPosterUrl
+        it.buildConfigField 'String', 'YOUTUBE_VIDEO_URL', YouTubeVideoUrl
+        it.buildConfigField 'String', 'YOUTUBE_THUMBNAIL_URL', YouTubeThumbnailUrl
     }
     repositories {
         mavenCentral()
@@ -35,6 +37,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
 
     compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.android.support:cardview-v7:25.3.1'
 

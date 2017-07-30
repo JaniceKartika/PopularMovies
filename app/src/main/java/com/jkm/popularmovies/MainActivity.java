@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Item
                     if (results != null && !results.isEmpty()) {
                         if (clearList) mPopularMovieModels.clear();
                         else popularPage++;
-                        mPopularMovieModels.addAll(response.body().getResults());
+                        mPopularMovieModels.addAll(results);
 
                         mMovieModels.clear();
                         mMovieModels.addAll(mPopularMovieModels);
@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Item
                     if (results != null && !results.isEmpty()) {
                         if (clearList) mTopRatedMovieModels.clear();
                         else topRatedPage++;
-                        mTopRatedMovieModels.addAll(response.body().getResults());
+                        mTopRatedMovieModels.addAll(results);
 
                         mMovieModels.clear();
                         mMovieModels.addAll(mTopRatedMovieModels);

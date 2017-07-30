@@ -2,13 +2,25 @@ package com.jkm.popularmovies;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -50,6 +62,17 @@ public class DetailActivity extends AppCompatActivity {
     @BindView(R.id.layout_movie_part_detail)
     LinearLayout moviePartDetailLayout;
 
+    @BindView(R.id.collapsing_toolbar_detail)
+    CollapsingToolbarLayout collapsingToolbar;
+    @BindView(R.id.tab_trailer_detail)
+    TabLayout trailerTabLayout;
+    @BindView(R.id.view_pager_trailer_detail)
+    ViewPager trailerViewPager;
+    @BindView(R.id.pb_trailer_detail)
+    ProgressBar trailerProgressBar;
+    @BindView(R.id.toolbar_detail)
+    Toolbar toolbar;
+
     @BindView(R.id.rv_review_detail)
     RecyclerView reviewRecyclerView;
     @BindView(R.id.tv_review_empty)
@@ -60,6 +83,7 @@ public class DetailActivity extends AppCompatActivity {
     private ReviewAdapter mReviewAdapter;
     private MovieModel mMovieModel;
     private ArrayList<ReviewResultModel> mReviewResultModels = new ArrayList<>();
+    private ArrayList<TrailerResultModel> mTrailerResultModels = new ArrayList<>();
 
     private DetailApiInterface mDetailApiInterface;
 
@@ -74,7 +98,13 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
 
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         int orientation = getResources().getConfiguration().orientation;
+        setToolbarViewParams(orientation);
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             setLinearLayoutWeight(moviePartDetailLayout, 2);
         } else {
@@ -92,9 +122,13 @@ public class DetailActivity extends AppCompatActivity {
             configureRecyclerView(reviewRecyclerView);
 
             if (savedInstanceState != null) {
+                mTrailerResultModels = savedInstanceState.getParcelableArrayList(getString(R.string.trailer_key));
+                configureViewPagerWithTabLayout(mTrailerResultModels);
+
                 mReviewResultModels = savedInstanceState.getParcelableArrayList(getString(R.string.review_key));
                 reviewPage = savedInstanceState.getInt(getString(R.string.review_page_key));
             } else {
+                callTrailers(mMovieModel.getId());
                 callReviews(mMovieModel.getId(), 1, true);
             }
 
@@ -106,6 +140,10 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void renderView(MovieModel movieModel) {
+        collapsingToolbar.setTitle(movieModel.getOriginalTitle());
+        collapsingToolbar.setCollapsedTitleTextColor(Color.WHITE);
+        collapsingToolbar.setExpandedTitleColor(Color.TRANSPARENT);
+
         nameTextView.setText(movieModel.getOriginalTitle());
 
         String posterPath = BuildConfig.MOVIE_DB_POSTER_URL + movieModel.getPosterPath();
@@ -142,6 +180,49 @@ public class DetailActivity extends AppCompatActivity {
         recyclerView.addOnScrollListener(mScrollListener);
     }
 
+    private void configureViewPagerWithTabLayout(ArrayList<TrailerResultModel> results) {
+        trailerViewPager.setAdapter(new TrailerViewPagerAdapter(getSupportFragmentManager(), results));
+        trailerTabLayout.setupWithViewPager(trailerViewPager, true);
+    }
+
+    private void callTrailers(int id) {
+        showTrailerLoading();
+
+        Call<TrailerModel> trailers = mDetailApiInterface.getTrailers(id, BuildConfig.MOVIE_DB_API_KEY);
+        trailers.enqueue(new Callback<TrailerModel>() {
+            @Override
+            public void onResponse(Call<TrailerModel> call, Response<TrailerModel> response) {
+                if (response.body() != null) {
+                    ArrayList<TrailerResultModel> results = response.body().getResults();
+                    if (results != null && !results.isEmpty()) {
+                        mTrailerResultModels.clear();
+
+                        for (TrailerResultModel result : results) {
+                            if (result.getSite().equals(getString(R.string.youtube))) {
+                                mTrailerResultModels.add(result);
+                            }
+                        }
+
+                        configureViewPagerWithTabLayout(mTrailerResultModels);
+                        hideTrailerLoading();
+                    } else {
+                        hideAllTrailerLayout();
+                    }
+                } else {
+                    Toast.makeText(DetailActivity.this, R.string.failed_fetch_trailers, Toast.LENGTH_SHORT).show();
+                    hideAllTrailerLayout();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TrailerModel> call, Throwable t) {
+                Log.e(TAG, getString(R.string.failed_fetch_trailers), t.getCause());
+                Toast.makeText(DetailActivity.this, R.string.failed_fetch_trailers, Toast.LENGTH_SHORT).show();
+                hideAllTrailerLayout();
+            }
+        });
+    }
+
     private void callReviews(int id, int page, final boolean clearList) {
         if (clearList) showReviewLoading();
 
@@ -156,7 +237,7 @@ public class DetailActivity extends AppCompatActivity {
                         if (clearList) mReviewResultModels.clear();
                         else reviewPage++;
 
-                        mReviewResultModels.addAll(response.body().getResults());
+                        mReviewResultModels.addAll(results);
                         mReviewAdapter.notifyDataSetChanged();
 
                         mScrollListener.resetState();
@@ -166,7 +247,7 @@ public class DetailActivity extends AppCompatActivity {
                     }
                 } else {
                     Toast.makeText(DetailActivity.this, R.string.failed_fetch_reviews, Toast.LENGTH_SHORT).show();
-                    hideReviewLoading();
+                    showReviewEmptyMessage();
                 }
             }
 
@@ -182,8 +263,17 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(getString(R.string.trailer_key), mTrailerResultModels);
         outState.putParcelableArrayList(getString(R.string.review_key), mReviewResultModels);
         outState.putInt(getString(R.string.review_page_key), reviewPage);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private String getFormattedDate(String date, String currentFormat, String targetFormat) {
@@ -198,10 +288,22 @@ public class DetailActivity extends AppCompatActivity {
         return null;
     }
 
-    private void setLinearLayoutWeight(LinearLayout linearLayout, float weight) {
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
-        layoutParams.weight = weight;
-        linearLayout.setLayoutParams(layoutParams);
+    private void showTrailerLoading() {
+        trailerProgressBar.setVisibility(View.VISIBLE);
+        trailerViewPager.setVisibility(View.INVISIBLE);
+        trailerTabLayout.setVisibility(View.INVISIBLE);
+    }
+
+    private void hideTrailerLoading() {
+        trailerProgressBar.setVisibility(View.GONE);
+        trailerViewPager.setVisibility(View.VISIBLE);
+        trailerTabLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void hideAllTrailerLayout() {
+        trailerProgressBar.setVisibility(View.GONE);
+        trailerViewPager.setVisibility(View.INVISIBLE);
+        trailerTabLayout.setVisibility(View.INVISIBLE);
     }
 
     private void showReviewLoading() {
@@ -222,8 +324,63 @@ public class DetailActivity extends AppCompatActivity {
         reviewEmptyTextView.setVisibility(View.VISIBLE);
     }
 
+    private void setLinearLayoutWeight(LinearLayout linearLayout, float weight) {
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.weight = weight;
+        linearLayout.setLayoutParams(layoutParams);
+    }
+
+    private void setToolbarViewParams(int orientation) {
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        int width = displaymetrics.widthPixels;
+        int height = displaymetrics.heightPixels;
+
+        int viewPagerHeight, tabLayoutMargin;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            viewPagerHeight = (width * 4) / 9;
+        } else {
+            viewPagerHeight = (height * 4 / 9);
+        }
+        tabLayoutMargin = width / 3;
+
+        CollapsingToolbarLayout.LayoutParams layoutParamsForViewPager = new CollapsingToolbarLayout
+                .LayoutParams(CollapsingToolbarLayout.LayoutParams.MATCH_PARENT, viewPagerHeight);
+        trailerViewPager.setLayoutParams(layoutParamsForViewPager);
+
+        CollapsingToolbarLayout.LayoutParams layoutParamsForTabLayout = new CollapsingToolbarLayout
+                .LayoutParams(CollapsingToolbarLayout.LayoutParams.WRAP_CONTENT, CollapsingToolbarLayout.LayoutParams.WRAP_CONTENT);
+        layoutParamsForTabLayout.rightMargin = tabLayoutMargin;
+        layoutParamsForTabLayout.leftMargin = tabLayoutMargin;
+        layoutParamsForTabLayout.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
+        trailerTabLayout.setLayoutParams(layoutParamsForTabLayout);
+    }
+
     interface DetailApiInterface {
         @GET("movie/{id}/reviews")
         Call<ReviewModel> getReviews(@Path("id") int id, @Query("api_key") String apiKey, @Query("page") int page);
+
+        @GET("movie/{id}/videos")
+        Call<TrailerModel> getTrailers(@Path("id") int id, @Query("api_key") String apiKey);
+    }
+
+    private class TrailerViewPagerAdapter extends FragmentPagerAdapter {
+        private ArrayList<TrailerResultModel> results;
+
+        TrailerViewPagerAdapter(FragmentManager manager, ArrayList<TrailerResultModel> results) {
+            super(manager);
+            this.results = results;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return TrailerFragment.newInstance(DetailActivity.this, results.get(position).getKey());
+        }
+
+        @Override
+        public int getCount() {
+            if (results == null) return 0;
+            else return results.size();
+        }
     }
 }
