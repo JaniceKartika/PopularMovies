@@ -31,6 +31,7 @@ import com.jkm.popularmovies.model.ReviewModel;
 import com.jkm.popularmovies.model.ReviewResultModel;
 import com.jkm.popularmovies.model.TrailerModel;
 import com.jkm.popularmovies.model.TrailerResultModel;
+import com.jkm.popularmovies.util.EndlessRecyclerViewScrollListener;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;

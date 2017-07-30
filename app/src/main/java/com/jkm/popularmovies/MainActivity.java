@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import com.jkm.popularmovies.model.MainModel;
 import com.jkm.popularmovies.model.MovieModel;
+import com.jkm.popularmovies.util.EndlessRecyclerViewScrollListener;
+import com.jkm.popularmovies.util.GridSpacingItemDecoration;
 
 import java.util.ArrayList;
 
