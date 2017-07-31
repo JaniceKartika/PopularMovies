@@ -11,6 +11,19 @@
         android:paddingBottom="@dimen/vertical_margin"
         android:scrollbars="none" />
 
+    <TextView
+        android:id="@+id/tv_movie_empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:text="@string/no_favorites"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="@dimen/font_normal"
+        android:visibility="gone" />
+
     <ProgressBar
         android:id="@+id/pb_movie_list"
         style="?android:attr/progressBarStyle"

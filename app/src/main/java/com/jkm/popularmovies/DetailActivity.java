@@ -1,7 +1,10 @@
 package com.jkm.popularmovies;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -20,12 +23,14 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jkm.popularmovies.data.MovieContract;
 import com.jkm.popularmovies.model.MovieModel;
 import com.jkm.popularmovies.model.ReviewModel;
 import com.jkm.popularmovies.model.ReviewResultModel;
@@ -62,6 +67,8 @@ public class DetailActivity extends AppCompatActivity {
     TextView releaseDateTextView;
     @BindView(R.id.tv_rating_detail)
     TextView ratingTextView;
+    @BindView(R.id.bt_add_favorite)
+    Button addFavoriteButton;
     @BindView(R.id.tv_overview_detail)
     TextView overviewTextView;
     @BindView(R.id.layout_movie_part_detail)
@@ -94,6 +101,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private int reviewPage = 2;
     private static int totalReviewPages;
+    private boolean isFavorite = false;
 
     private EndlessRecyclerViewScrollListener mScrollListener;
 
@@ -123,6 +131,8 @@ public class DetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent.hasExtra(getString(R.string.detail_key))) {
             mMovieModel = intent.getParcelableExtra(getString(R.string.detail_key));
+
+            isFavorite = isFavoriteMovie();
             renderView(mMovieModel);
             configureRecyclerView(reviewRecyclerView);
 
@@ -142,6 +152,58 @@ public class DetailActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, getString(R.string.failed_show_detail), Toast.LENGTH_LONG).show();
         }
+
+        addFavoriteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isFavorite) {
+                    deleteFromDatabase();
+                    Toast.makeText(DetailActivity.this, getString(R.string.removed_from_favorites), Toast.LENGTH_SHORT).show();
+                    addFavoriteButton.setText(getString(R.string.add_favorite));
+                } else {
+                    insertToDatabase();
+                    Toast.makeText(DetailActivity.this, getString(R.string.added_to_favorites), Toast.LENGTH_SHORT).show();
+                    addFavoriteButton.setText(getString(R.string.remove_favorite));
+                }
+            }
+        });
+    }
+
+    private boolean isFavoriteMovie() {
+        ContentResolver detailContentResolver = getContentResolver();
+        Cursor cursor = detailContentResolver.query(
+                MovieContract.MovieEntry.buildMovieUriWithName(mMovieModel.getOriginalTitle()),
+                null,
+                null,
+                null,
+                MovieContract.MovieEntry._ID + " ASC");
+
+        if (cursor != null) {
+            cursor.close();
+            return cursor.getCount() > 0;
+        } else {
+            return false;
+        }
+    }
+
+    private void insertToDatabase() {
+        ContentResolver detailContentResolver = getContentResolver();
+
+        ContentValues movieValues = new ContentValues();
+        movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_NAME, mMovieModel.getOriginalTitle());
+        movieValues.put(MovieContract.MovieEntry.COLUMN_POSTER_PATH, mMovieModel.getPosterPath());
+        movieValues.put(MovieContract.MovieEntry.COLUMN_OVERVIEW, mMovieModel.getOverview());
+        movieValues.put(MovieContract.MovieEntry.COLUMN_USER_RATING, mMovieModel.getVoteAverage());
+        movieValues.put(MovieContract.MovieEntry.COLUMN_RELEASE_DATE, mMovieModel.getReleaseDate());
+
+        detailContentResolver.insert(MovieContract.MovieEntry.CONTENT_URI, movieValues);
+    }
+
+    private void deleteFromDatabase() {
+        ContentResolver detailContentResolver = getContentResolver();
+        String[] selectionArguments = new String[]{mMovieModel.getOriginalTitle()};
+        detailContentResolver.delete(MovieContract.MovieEntry.CONTENT_URI,
+                MovieContract.MovieEntry.COLUMN_MOVIE_NAME + " = ? ", selectionArguments);
     }
 
     private void renderView(MovieModel movieModel) {
@@ -164,6 +226,9 @@ public class DetailActivity extends AppCompatActivity {
 
         String rating = String.valueOf(movieModel.getVoteAverage()) + getString(R.string.max_rating);
         ratingTextView.setText(rating);
+
+        if (isFavorite) addFavoriteButton.setText(getString(R.string.remove_favorite));
+        else addFavoriteButton.setText(getString(R.string.add_favorite));
 
         overviewTextView.setText(movieModel.getOverview());
     }

@@ -7,6 +7,8 @@
     <dimen name="line_spacing">4dp</dimen>
     <dimen name="icon_size">64dp</dimen>
 
+    <dimen name="button_height">36dp</dimen>
+
     <dimen name="font_small">14sp</dimen>
     <dimen name="font_normal">16sp</dimen>
     <dimen name="font_large">18sp</dimen>

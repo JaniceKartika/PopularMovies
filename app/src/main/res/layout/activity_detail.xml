@@ -128,10 +128,25 @@
                         android:id="@+id/tv_rating_detail"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/vertical_margin"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin"
                         android:textColor="@color/textColorPrimary"
                         android:textSize="@dimen/font_normal"
                         tools:text="6.8/10.0" />
+
+                    <Button
+                        android:id="@+id/bt_add_favorite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/button_height"
+                        android:background="@drawable/selector_button"
+                        android:drawableEnd="@drawable/ic_favorite"
+                        android:drawableRight="@drawable/ic_favorite"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/horizontal_margin"
+                        android:paddingRight="@dimen/horizontal_margin"
+                        android:text="@string/add_favorite"
+                        android:textAllCaps="true"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/font_small" />
                 </LinearLayout>
             </LinearLayout>
 

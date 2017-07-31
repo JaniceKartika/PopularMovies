@@ -2,14 +2,25 @@
     <string name="app_name">Popular Movies</string>
     <string name="detail_label">Movie Detail</string>
 
+    <string name="content_authority" translatable="false">com.jkm.popularmovies</string>
+    <string name="content_provider_unknown_uri">Unknown URI:&#160;</string>
+    <string name="content_provider_not_implemented">Not implemented method</string>
+    <string name="loader_not_implemented">Loader not implemented&#160;</string>
+
     <string name="poster_description">Movie Poster</string>
 
+    <string name="favorites">Favorites</string>
     <string name="popular">Popular</string>
     <string name="top_rated">Top Rated</string>
 
     <string name="release_date">Release Date</string>
     <string name="rating">Rating</string>
     <string name="reviews">Reviews</string>
+
+    <string name="add_favorite">Add to&#160;</string>
+    <string name="remove_favorite">Remove from&#160;</string>
+    <string name="added_to_favorites">Added to Favorites</string>
+    <string name="removed_from_favorites">Removed from Favorites</string>
 
     <string name="failed_fetch_popular">Failed to fetch Popular Movies</string>
     <string name="failed_fetch_top_rated">Failed to fetch Top Rated Movies</string>
@@ -18,6 +29,7 @@
     <string name="failed_fetch_trailers">Failed to fetch Movie trailers</string>
     <string name="no_results">No results</string>
     <string name="no_reviews">No reviews</string>
+    <string name="no_favorites">Click \"Add to Favorites\" to show your favorite movies here!</string>
 
     <string name="youtube" translatable="false">YouTube</string>
     <string name="youtube_app" translatable="false">vnd.youtube:</string>
