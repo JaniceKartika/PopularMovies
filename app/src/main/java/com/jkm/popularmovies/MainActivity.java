@@ -46,17 +46,19 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private static final int SORT_TOP_RATED = 3;
 
     public static final String[] MOVIE_PROJECTION = {
+            MovieContract.MovieEntry.COLUMN_MOVIE_ID,
             MovieContract.MovieEntry.COLUMN_MOVIE_NAME,
             MovieContract.MovieEntry.COLUMN_POSTER_PATH,
             MovieContract.MovieEntry.COLUMN_OVERVIEW,
             MovieContract.MovieEntry.COLUMN_USER_RATING,
             MovieContract.MovieEntry.COLUMN_RELEASE_DATE
     };
-    public static final int INDEX_MOVIE_NAME = 0;
-    public static final int INDEX_POSTER_PATH = 1;
-    public static final int INDEX_OVERVIEW = 2;
-    public static final int INDEX_USER_RATING = 3;
-    public static final int INDEX_RELEASE_DATE = 4;
+    public static final int INDEX_MOVIE_ID = 0;
+    public static final int INDEX_MOVIE_NAME = 1;
+    public static final int INDEX_POSTER_PATH = 2;
+    public static final int INDEX_OVERVIEW = 3;
+    public static final int INDEX_USER_RATING = 4;
+    public static final int INDEX_RELEASE_DATE = 5;
 
     private static final int ID_MOVIE_LOADER = 44;
 
@@ -332,7 +334,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         switch (id) {
             case ID_MOVIE_LOADER:
                 Uri movieQueryUri = MovieContract.MovieEntry.CONTENT_URI;
-                String sortOrder = MovieContract.MovieEntry._ID + " ASC";
+                String sortOrder = MovieContract.MovieEntry._ID + " DESC";
 
                 return new CursorLoader(this, movieQueryUri, MOVIE_PROJECTION, null, null, sortOrder);
             default:
@@ -366,6 +368,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         for (int i = 0; i < data.getCount(); i++) {
             data.moveToPosition(i);
             MovieModel model = new MovieModel();
+            model.setId(data.getInt(INDEX_MOVIE_ID));
             model.setOriginalTitle(data.getString(INDEX_MOVIE_NAME));
             model.setPosterPath(data.getString(INDEX_POSTER_PATH));
             model.setOverview(data.getString(INDEX_OVERVIEW));

@@ -172,7 +172,7 @@ public class DetailActivity extends AppCompatActivity {
     private boolean isFavoriteMovie() {
         ContentResolver detailContentResolver = getContentResolver();
         Cursor cursor = detailContentResolver.query(
-                MovieContract.MovieEntry.buildMovieUriWithName(mMovieModel.getOriginalTitle()),
+                MovieContract.MovieEntry.buildMovieUriWithMovieId(mMovieModel.getId()),
                 null,
                 null,
                 null,
@@ -190,6 +190,7 @@ public class DetailActivity extends AppCompatActivity {
         ContentResolver detailContentResolver = getContentResolver();
 
         ContentValues movieValues = new ContentValues();
+        movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, mMovieModel.getId());
         movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_NAME, mMovieModel.getOriginalTitle());
         movieValues.put(MovieContract.MovieEntry.COLUMN_POSTER_PATH, mMovieModel.getPosterPath());
         movieValues.put(MovieContract.MovieEntry.COLUMN_OVERVIEW, mMovieModel.getOverview());
@@ -201,9 +202,9 @@ public class DetailActivity extends AppCompatActivity {
 
     private void deleteFromDatabase() {
         ContentResolver detailContentResolver = getContentResolver();
-        String[] selectionArguments = new String[]{mMovieModel.getOriginalTitle()};
+        String[] selectionArguments = new String[]{String.valueOf(mMovieModel.getId())};
         detailContentResolver.delete(MovieContract.MovieEntry.CONTENT_URI,
-                MovieContract.MovieEntry.COLUMN_MOVIE_NAME + " = ? ", selectionArguments);
+                MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ? ", selectionArguments);
     }
 
     private void renderView(MovieModel movieModel) {

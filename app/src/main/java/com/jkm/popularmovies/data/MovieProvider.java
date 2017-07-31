@@ -13,7 +13,7 @@ import com.jkm.popularmovies.R;
 
 public class MovieProvider extends ContentProvider {
     public static final int CODE_MOVIE_FAVORITES = 100;
-    public static final int CODE_MOVIE_WITH_NAME = 101;
+    public static final int CODE_MOVIE_WITH_ID = 101;
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
 
@@ -26,7 +26,7 @@ public class MovieProvider extends ContentProvider {
         final String authority = MovieContract.CONTENT_AUTHORITY;
 
         matcher.addURI(authority, MovieContract.PATH_MOVIE, CODE_MOVIE_FAVORITES);
-        matcher.addURI(authority, MovieContract.PATH_MOVIE + "/*", CODE_MOVIE_WITH_NAME);
+        matcher.addURI(authority, MovieContract.PATH_MOVIE + "/#", CODE_MOVIE_WITH_ID);
 
         return matcher;
     }
@@ -74,7 +74,7 @@ public class MovieProvider extends ContentProvider {
                 Uri resultUri = null;
                 long id = mOpenHelper.getWritableDatabase().insert(MovieContract.MovieEntry.TABLE_NAME, null, values);
                 if (id != -1) {
-                    resultUri = MovieContract.MovieEntry.buildMovieUriWithName(values.getAsString(MovieContract.MovieEntry.COLUMN_MOVIE_NAME));
+                    resultUri = MovieContract.MovieEntry.buildMovieUriWithMovieId(values.getAsInteger(MovieContract.MovieEntry.COLUMN_MOVIE_ID));
                 }
                 if (resultUri != null) {
                     context.getContentResolver().notifyChange(resultUri, null);
@@ -90,13 +90,13 @@ public class MovieProvider extends ContentProvider {
         Cursor cursor;
 
         switch (sUriMatcher.match(uri)) {
-            case CODE_MOVIE_WITH_NAME: {
-                String movieName = uri.getLastPathSegment();
-                String[] selectionArguments = new String[]{movieName};
+            case CODE_MOVIE_WITH_ID: {
+                String movieId= uri.getLastPathSegment();
+                String[] selectionArguments = new String[]{movieId};
 
                 cursor = mOpenHelper.getReadableDatabase().query(MovieContract.MovieEntry.TABLE_NAME,
                         projection,
-                        MovieContract.MovieEntry.COLUMN_MOVIE_NAME + " = ? ",
+                        MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ? ",
                         selectionArguments,
                         null,
                         null,
