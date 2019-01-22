@@ -1,7 +1,7 @@
 package com.jkm.popularmovies;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,13 +64,13 @@ class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
     }
 
     class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @BindView(R.id.iv_movie_poster)
+        @BindView(R2.id.iv_movie_poster)
         ImageView mPosterImageView;
-        @BindView(R.id.tv_movie_name)
+        @BindView(R2.id.tv_movie_name)
         TextView mNameTextView;
-        @BindView(R.id.tv_movie_year)
+        @BindView(R2.id.tv_movie_year)
         TextView mYearTextView;
-        @BindView(R.id.tv_movie_rating)
+        @BindView(R2.id.tv_movie_rating)
         TextView mRatingTextView;
 
         MovieViewHolder(View itemView) {

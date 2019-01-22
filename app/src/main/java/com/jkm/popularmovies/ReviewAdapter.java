@@ -1,7 +1,7 @@
 package com.jkm.popularmovies;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
@@ -82,9 +82,9 @@ class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>
     }
 
     class ReviewViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.tv_author_review)
+        @BindView(R2.id.tv_author_review)
         TextView mAuthorTextView;
-        @BindView(R.id.tv_review)
+        @BindView(R2.id.tv_review)
         TextView mReviewTextView;
 
         ReviewViewHolder(View itemView) {

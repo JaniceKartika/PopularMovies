@@ -6,7 +6,7 @@
     android:background="@android:color/black">
 
     <ImageView
-        android:id="@+id/iv_thumbnail_trailer"
+        android:id="@+id/thumbnailImageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:contentDescription="@string/poster_description"
@@ -14,7 +14,7 @@
         tools:src="@drawable/placeholder" />
 
     <ImageView
-        android:id="@+id/iv_play_trailer"
+        android:id="@+id/playTrailerImageView"
         android:layout_width="@dimen/icon_size"
         android:layout_height="@dimen/icon_size"
         android:layout_centerInParent="true"
